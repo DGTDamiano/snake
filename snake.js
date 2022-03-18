@@ -26,6 +26,9 @@ function draw() {
     createRect(0,0, canvas.width, canvas.height)
 
     //create snake
+   
+        createRect(20, 100, 10,10, "white")
+    
     
 
     canvasContext.font = "20px Arial"
@@ -37,4 +40,17 @@ function draw() {
 function createRect(x,y,width, height,color) {
     canvasContext.fillStyle = color
     canvasContext.fillRect(x, y, width, height)
+}
+
+class Snake {
+    constructor(x, y, size) {
+        this.x = x
+        this.y = y
+        this.size = size
+        this.tail = [{x:this.x, y:this.y}]
+        this.rotateX = 0
+        this.rotateY = 1
+    }
+
+  
 }
