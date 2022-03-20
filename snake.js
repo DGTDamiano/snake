@@ -1,13 +1,18 @@
 const canvas = document.getElementById("canvas")
 const canvasContext = canvas.getContext('2d')
 
+var initialX, initialY
 
+var score = 0
+
+initialX = Math.floor(Math.random() * 200)
+initialY = Math.floor(Math.random() * 200)
 
 class Snake {
     constructor(x, y, size) {
         this.x = x
         this.y = y
-        this.xspeed =1
+        this.xspeed =5
         this.yspeed =0
         this.lenght =0
     }
@@ -19,22 +24,63 @@ class Snake {
 
     show(){
         createRect(this.x,this.y, 20, 20, "white") 
-       // console.log(this.x , this.y)
+        //console.log(this.x , canvas.width,this.xspeed)
+
     }
 
     dir(x,y){
         this.xspeed=x
         this.yspeed=y
     }
+
+    hitWall(){
+        if (this.x >= canvas.width){
+            
+            this.x= 1
+        }
+        if (this.x <= 0){
+            this.x=canvas.width
+        }
+        if (this.y >= canvas.height){
+            
+            this.y= 1
+        }
+        if (this.x <= 0){
+            this.y=canvas.height
+        }
+    }
   
 }
 
+class Apple {
+    
+    constructor(x,y,dim){
+        this.x=x
+        this.y=y
+        this.dim=20
+    }
+
+    show(){
+        createRect(this.x,this.y, this.dim, this.dim, "red") 
+       
+    }
+
+    eat(){
+        var a = snake.x - this.x;
+        var b = snake.y - this.y;
+        var distance=Math.sqrt( a*a + b*b )
+        
+        if (distance<5){
+            this.x=Math.floor(Math.random() * canvas.width-10)
+            this.y=Math.floor(Math.random() * canvas.height-10)
+            score ++
+        }
+    }
+}
+
+const apple  = new Apple(initialX,initialY)
 const snake  = new Snake(100,100)
 
-function createRect(x,y,width, height,color) {
-    canvasContext.fillStyle = color
-    canvasContext.fillRect(x, y, width, height)
-}
 
 
 window.onload = () => {
@@ -42,7 +88,7 @@ window.onload = () => {
 }
 
 function gameLoop() {
-    setInterval(show, 1000/15) // 15 valore di refresh 
+    setInterval(show, 1000/50) // 15 valore di refresh 
 }
 
 function show() {
@@ -51,6 +97,9 @@ function show() {
 
     snake.update()
     snake.show()
+    snake.hitWall()
+    apple.show()
+    apple.eat()
 }
 
 function update() {
@@ -65,7 +114,7 @@ function draw() {
     //punteggio
     canvasContext.font = "20px Arial"
     canvasContext.fillStyle = "#00FF42"
-    canvasContext.fillText("Score: " + snake.lenght,canvas.width - 120, 18)
+    canvasContext.fillText("Score: " + score,canvas.width - 120, 18)
 
 }
 
@@ -88,5 +137,9 @@ window.addEventListener("keydown", (event) => {
     }, 1)
 })
 
+function createRect(x,y,width, height,color) {
+    canvasContext.fillStyle = color
+    canvasContext.fillRect(x, y, width, height)
+}
 
 
