@@ -16,15 +16,30 @@ class Snake {
         this.xspeed =1
         this.yspeed =0
         this.total=0
+        this.tail =[]
     }
 
     update() {
+
+        for(var i =0; i < this.tail.length-1; i++){
+            this.tail[i]= this.tail[i+1]
+        }
+
+        if (this.total >= 1) {
+            this.tail[this.total - 1]=({x: this.x, y: this.y});
+           // this.tail[this.total - 1] = createVector(this.x, this.y);
+          }
         this.x = this.x + this.xspeed*scl
         this.y = this.y + this.yspeed*scl
     }
 
     show(){
-        createRect(this.x,this.y, scl, scl, "white") 
+        for(var i =0; i < this.tail.length; i++){
+
+            createRect(this.tail[i].x,this.tail[i].y, scl, scl, "white") 
+           
+        }
+        createRect(this.x,this.y,scl,scl,"white")
     }
 
     dir(x,y){
@@ -106,9 +121,8 @@ function show() {
 
 function update() {
     canvasContext.clearRect(0, 0, canvas.width, canvas.height) // pulisci background
-
+    console.log(snake.tail.length)
 }
-
 function draw() {
     //crea background nero 
     createRect(0,0, canvas.width, canvas.height, "black")
@@ -144,5 +158,3 @@ function createRect(x,y,width, height,color) {
     canvasContext.fillStyle = color
     canvasContext.fillRect(x, y, width, height)
 }
-
-
